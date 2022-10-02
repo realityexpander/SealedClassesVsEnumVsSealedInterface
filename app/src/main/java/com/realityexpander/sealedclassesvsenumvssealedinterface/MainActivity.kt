@@ -108,11 +108,11 @@ class MainActivity : ComponentActivity() {
                         //////////////////////////////////////////////////////////
                         val errorEnum: HttpErrorEnum = arrayOf(
                             HttpErrorEnum.Unauthorized,
-                            HttpErrorEnum.UnauthorizedWithMessage, // uses the default message from the enum
+                            HttpErrorEnum.UnauthorizedWithMessage, // uses the default message from the enum.
                             HttpErrorEnum.NotFound,
                             HttpErrorEnum.UnauthorizedWithMessage.
                                 apply {
-                                    message = "Message Changed at runtime" // override the default message
+                                    message = "Message Changed at runtime" // modify the default message at runtime. (for vars)
                                 }
                         ).random()
                         Text("errorEnum: type=${errorEnum.getShortClassName(1)}")

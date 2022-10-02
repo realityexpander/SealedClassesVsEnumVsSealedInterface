@@ -35,7 +35,7 @@ sealed class HttpErrorSealed2(val code: Int) {
     }
 
 // Pro: Enums use less memory and can be checked at compile time.
-// Con: All parameters for all enums must be included in the constructor.
+// Con: All parameters for all enums must be included in the constructor with defaults for unused parameters.
 // Con: Enum parameters cannot be passed in at runtime. (but they can be modified)
 // Pro: `when` expressions show warning if not exhaustive.
 enum class HttpErrorEnum(val code: Int, var message: String? = null) {
@@ -77,6 +77,7 @@ sealed interface HttpErrorSealedInterface1 {
 // Sealed interface - complex & hierarchical
 // Pros: Sealed interfaces can be used to create a hierarchy of classes.
 // Pros: Allows for more complex hierarchies than sealed classes.
+// Pros: Using a hierarchy allows for easier to read code (ie: Unauthorized.WithMessage)
 // Cons: primary constructor cannot be used.
 // Cons: Must use "inner classes" to create the types.
 // Cons: `when` expressions are no longer exhaustive and show no warning for unimplemented cases.

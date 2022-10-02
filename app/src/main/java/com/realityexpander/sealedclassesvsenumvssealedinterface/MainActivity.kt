@@ -1,7 +1,6 @@
 package com.realityexpander.sealedclassesvsenumvssealedinterface
 
 import android.os.Bundle
-import android.widget.ScrollView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background

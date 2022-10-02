@@ -1,4 +1,4 @@
-package com.example.sealedclassesvsenumvssealedinterface
+package com.realityexpander.sealedclassesvsenumvssealedinterface
 
 import org.junit.Test
 

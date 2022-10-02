@@ -1,4 +1,4 @@
-package com.example.sealedclassesvsenumvssealedinterface
+package com.realityexpander.sealedclassesvsenumvssealedinterface
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,16 +12,17 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.sealedclassesvsenumvssealedinterface.ui.theme.SealedClassesVsEnumVsSealedInterfaceTheme
+import com.realityexpander.sealedclassesvsenumvssealedinterface.HttpErrorSealedInterface2.Default.code
+import com.realityexpander.sealedclassesvsenumvssealedinterface.HttpErrorSealedInterface2.Default.message
+import com.realityexpander.sealedclassesvsenumvssealedinterface.ui.theme.SealedClassesVsEnumVsSealedInterfaceTheme
 import kotlin.random.Random
 
-class MainActivity(code: Int) : ComponentActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             SealedClassesVsEnumVsSealedInterfaceTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -66,7 +67,7 @@ class MainActivity(code: Int) : ComponentActivity() {
                         Text("errorSealed2.getErrorMessage: ${errorSealed2.getErrorMessage()}")
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        // Sealed classes are harder to iterate
+                        // Sealed classes values are more difficult than Enums to iterate (requires a reflection library)
                         // show all sealed class members
                         HttpErrorSealed2::class.nestedClasses.forEachIndexed { index, item ->
                             Text("errorSealed2 nestedClasses $index: ${item.simpleName}")
@@ -81,12 +82,13 @@ class MainActivity(code: Int) : ComponentActivity() {
                         //////////////////////////////////////////////////////////
                         // Enums
                         val errorEnum: HttpErrorEnum = arrayOf(
-                            HttpErrorEnum.NotFound,
                             HttpErrorEnum.Unauthorized,
                             HttpErrorEnum.UnauthorizedWithMessage, // uses the default message from the enum
-                            HttpErrorEnum.UnauthorizedWithMessage.apply {
-                                message = "Message Changed at runtime" // override the default message
-                            }
+                            HttpErrorEnum.NotFound,
+                            HttpErrorEnum.UnauthorizedWithMessage.
+                                apply {
+                                    message = "Message Changed at runtime" // override the default message
+                                }
                         ).random()
                         when (errorEnum) {
                             HttpErrorEnum.NotFound -> Text("errorEnum: Not Found: ${errorEnum.code}")
@@ -132,32 +134,49 @@ class MainActivity(code: Int) : ComponentActivity() {
 
                         //////////////////////////////////////////////////////////
                         // Sealed interface - complex
-//                        val errorSealedInterface2: HttpErrorSealedInterface2 = HttpErrorSealedInterface2.Default  // NOTE: must use specific type to initialize the variable
-//                        val errorSealedInterface2: HttpErrorSealedInterface2 = HttpErrorSealedInterface2.Extra.ExtraWithData("Extra Data")
-                        val errorSealedInterface2: HttpErrorSealedInterface2 = HttpErrorSealedInterface2.Extra.ExtraWithDataAndMessage("message", "Extra Data")
+//                        val errorSealedInterface2: HttpErrorSealedInterface2 =
+//                           HttpErrorSealedInterface2.Default  // NOTE: must use specific type to initialize the variable
+//                        val errorSealedInterface2: HttpErrorSealedInterface2 =
+//                           HttpErrorSealedInterface2.Extra.ExtraWithData("Extra Data")
+//                        val errorSealedInterface2: HttpErrorSealedInterface2 =
+//                            HttpErrorSealedInterface2.Extra.WithDataAndMessage("message", "Extra Data")
+//                        val errorSealedInterface2: HttpErrorSealedInterface2 =
+//                            HttpErrorSealedInterface2.Default
 
-//                        val errorSealedInterface2 = arrayOf(
-//                            HttpErrorSealedInterface2.NotFoundBase.NotFound,
-//                            HttpErrorSealedInterface2.UnauthorizedBase.Unauthorized,
-//                            HttpErrorSealedInterface2.UnauthorizedBase.UnauthorizedWithMessage("Unauthorized with message"),
-//                            HttpErrorSealedInterface2.Default, // objects are ok
-//                            // HttpErrorSealedInterface2.Impossible(100, "Impossible message") // cannot instantiate sealed classes without having its own inner classes
-//                            HttpErrorSealedInterface2.Extra.ExtraWithData("Extra Data"),
-//                            HttpErrorSealedInterface2.Extra.ExtraWithDataAndMessage("message", "Extra Data"),
-//                        ).random()
+                        val errorSealedInterface2 = arrayOf(
+                            HttpErrorSealedInterface2.NotFound.Simple,
+                            HttpErrorSealedInterface2.Unauthorized.Simple,
+                            HttpErrorSealedInterface2.Unauthorized.WithMessage("Unauthorized with message"),
+                            HttpErrorSealedInterface2.Default, // objects are ok
+                            // HttpErrorSealedInterface2.Impossible(100, "Impossible message") // cannot instantiate sealed classes without having its own inner classes
+                            HttpErrorSealedInterface2.Extra.WithData("Extra Data"),
+                            HttpErrorSealedInterface2.Extra.WithDataAndMessage("message", "Extra Data"),
+                        ).random()
                         when (errorSealedInterface2) {
                             HttpErrorSealedInterface2.Default ->
                                 Text("errorSealedInterface2: Default, ${errorSealedInterface2.code}, ${errorSealedInterface2.message}")
-                            HttpErrorSealedInterface2.NotFoundBase.NotFound ->
-                                Text("errorSealedInterface2: Not Found")
-                            HttpErrorSealedInterface2.UnauthorizedBase.Unauthorized ->
-                                Text("errorSealedInterface2: Unauthorized")
-                            is HttpErrorSealedInterface2.UnauthorizedBase.UnauthorizedWithMessage ->
-                                Text("errorSealedInterface2: UnauthorizedWithMessage: message= ${errorSealedInterface2.message}")
-                            is HttpErrorSealedInterface2.Extra.ExtraWithDataAndMessage ->
-                                Text("errorSealedInterface2: ExtraWithDataAndMessage: " +
+
+                            HttpErrorSealedInterface2.NotFound.Simple ->  // specific case
+                                Text("errorSealedInterface2: NotFound.Simple")
+                            is HttpErrorSealedInterface2.NotFound  -> // general case
+                                Text("errorSealedInterface2: NotFound $code $message")
+
+                            HttpErrorSealedInterface2.Unauthorized.Simple ->
+                                Text("errorSealedInterface2: Unauthorized.Simple")
+                            is HttpErrorSealedInterface2.Unauthorized.WithMessage ->
+                                Text("errorSealedInterface2: Unauthorized.WithMessage: message= ${errorSealedInterface2.message}")
+
+//                          // NOTE: If this specific case is not handled, the general case will be used (below).
+//                            is HttpErrorSealedInterface2.Extra.WithDataAndMessage ->  // Intentionally commented out to show general behavior.
+//                                Text("errorSealedInterface2: Extra.WithDataAndMessage: " +
+//                                        "message= ${errorSealedInterface2.message}, " +
+//                                        "extra= ${errorSealedInterface2.data}")
+                            is HttpErrorSealedInterface2.Extra -> // NOTE: this is the base class of the sealed interface (Its the super class, and it catches any subclass cases)
+                                Text("errorSealedInterface2: Extra: " +
+                                        "code= ${errorSealedInterface2.code}, " +
                                         "message= ${errorSealedInterface2.message}, " +
                                         "extra= ${errorSealedInterface2.data}")
+
                             else -> {
                                 Text("errorSealedInterface2: Unknown")
                             }

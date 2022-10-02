@@ -1,4 +1,4 @@
-package com.example.sealedclassesvsenumvssealedinterface.ui.theme
+package com.realityexpander.sealedclassesvsenumvssealedinterface.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

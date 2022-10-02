@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.sealedclassesvsenumvssealedinterface'
+    namespace 'com.realityexpander.sealedclassesvsenumvssealedinterface'
     compileSdk 32
 
     defaultConfig {
-        applicationId "com.example.sealedclassesvsenumvssealedinterface"
+        applicationId "com.realityexpander.sealedclassesvsenumvssealedinterface"
         minSdk 24
         targetSdk 32
         versionCode 1

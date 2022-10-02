@@ -1,4 +1,4 @@
-package com.example.sealedclassesvsenumvssealedinterface
+package com.realityexpander.sealedclassesvsenumvssealedinterface
 
 
 // Sealed class with no constructors
@@ -10,7 +10,7 @@ sealed class HttpErrorSealed1 {
         return when (this) {
             Unauthorized -> "Unauthorized"
             NotFound -> "Not Found"
-            else -> "Unknown"
+            //else -> "Unknown" // not needed if all cases are covered
 
         }
     }
@@ -28,7 +28,7 @@ sealed class HttpErrorSealed2(val code: Int) {
             Unauthorized -> "Unauthorized: $code"
             is UnauthorizedWithMessage -> "Unauthorized: $code, $message"
             NotFound -> "Not Found: $code"
-            else -> "Unknown: unknown code"
+            // else -> "Unknown: unknown code" // not needed if all cases are covered
 
         }
     }
@@ -48,7 +48,7 @@ enum class HttpErrorEnum(val code: Int, var message: String? = null) {
             Unauthorized -> "Unauthorized $code"
             UnauthorizedWithMessage -> "UnauthorizedWithMessage: $code, $message"
             NotFound -> "Not Found $code"
-            else -> "Unknown: unknown code"
+            // else -> "Unknown: unknown code" // not needed if all cases are covered
         }
     }
 }
@@ -68,14 +68,14 @@ sealed interface HttpErrorSealedInterface1 {
             Unauthorized -> "Unauthorized"
             is UnauthorizedWithMessage -> "Unauthorized ${this.message}"
             NotFound -> "Not Found"
-            else -> "Unknown"
+            // else -> "Unknown" // not needed if all cases are covered
 
         }
     }
 }
 
-// Sealed interface - complex
-// Pros: Sealed interfaces can be used to create a hierarchy of classes that can be checked at compile time.
+// Sealed interface - complex & hierarchical
+// Pros: Sealed interfaces can be used to create a hierarchy of classes.
 // Pros: Allows for more complex hierarchies than sealed classes.
 // Cons: primary constructor cannot be used.
 // Cons: Must use "inner classes" to create the types.
@@ -103,53 +103,62 @@ sealed interface HttpErrorSealedInterface2 {
         override val message: String? = null,
         open val data: String? = null
     ): HttpErrorSealedInterface2 {
-        object ExtraSimple : Extra(200)
 
-        data class ExtraWithData(
+        object Simple : Extra(200)
+
+        data class WithData(
             override val data: String
         ) : Extra(201, data = data)
 
-        data class ExtraWithDataAndMessage(
+        data class WithDataAndMessage(
             override val message: String,
             override val data: String,
         ) : Extra(202, message, data)
     }
 
-    sealed class UnauthorizedBase(
+    sealed class Unauthorized(
         override val code: Int,
         override val message: String? = null
     ) : HttpErrorSealedInterface2 {
-        object Unauthorized
-            : UnauthorizedBase(401)
 
-        data class UnauthorizedWithMessage(override val message: String)
-            : UnauthorizedBase(402, message)
+        object Simple
+            : Unauthorized(401)
+
+        data class WithMessage(override val message: String)
+            : Unauthorized(402, message)
     }
 
-    sealed class NotFoundBase(
+    sealed class NotFound(
         override val code: Int,
         override val message: String? = null
     ) : HttpErrorSealedInterface2 {
-        object NotFound
-            : NotFoundBase(404, "Not Found")
+
+        object Simple
+            : NotFound(404, "Not Found")
     }
 
-    // Note: The cases below are not exhaustive.
-    // Note: The cases below are arranged from MOST specific to most general.
+    // Note: The cases below may not be exhaustive. No compiler warning is given.
+    // Note: The cases below are arranged from MOST specific to most general. (hierarchical)
+    //       If the specific cases are not caught first, the more general cases will be caught last.
     fun getErrorMessage(): String {
         return when (this) {
-            is UnauthorizedBase.Unauthorized -> "Unauthorized: $code"
-            is UnauthorizedBase.UnauthorizedWithMessage -> "UnauthorizedWithMessage: $code, $message"
-            is UnauthorizedBase -> "UnauthorizedBase: $code, $message"
-            is NotFoundBase.NotFound -> "NotFound: $code, $message"
-            is NotFoundBase -> "NotFoundBase: $code"
-            is Impossible -> "Impossible: $code, $message"
+            is Unauthorized.Simple -> "Unauthorized.Simple: $code"
+            is Unauthorized.WithMessage -> "Unauthorized.WithMessage: $code, $message"
+            is Unauthorized -> "Unauthorized: $code, $message"
+
+            is NotFound.Simple -> "NotFound.Simple: $code, $message"
+            is NotFound -> "NotFound: $code"
+
+            is Impossible -> "Impossible: $code, $message" // should never be reached.
+
             is Default -> "Default: $code, $message"
-            is Extra.ExtraSimple -> "ExtraSimple: $code"
-            is Extra.ExtraWithData -> "ExtraWithData: $code, $data"
-            is Extra.ExtraWithDataAndMessage -> "ExtraWithDataAndMessage: $code, $message, $data"
+
+            is Extra.Simple -> "Extra.Simple: $code"
+            is Extra.WithData -> "Extra.WithData: $code, $data"
+            is Extra.WithDataAndMessage -> "Extra.WithDataAndMessage: $code, $message, $data"
             is Extra -> "Extra: $code, $message, $data"
-            else -> "Unknown: unknown code"
+
+            else -> "Unknown: unknown code" // Needed because all no warning is given for unimplemented cases.
         }
     }
 }

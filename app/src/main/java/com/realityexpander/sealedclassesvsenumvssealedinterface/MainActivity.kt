@@ -86,7 +86,6 @@ class MainActivity : ComponentActivity() {
                             //}
                         }
                         Text("errorSealed2.getErrorMessage: ${errorSealed2.getErrorMessage()}")
-
                         Spacer(modifier = Modifier.height(4.dp))
 
                         // show all sealed class members
@@ -127,10 +126,10 @@ class MainActivity : ComponentActivity() {
                             HttpErrorEnum.Unauthorized -> Text("errorEnum: Unauthorized: ${errorEnum.code}")
                             HttpErrorEnum.UnauthorizedWithMessage -> Text("errorEnum: UnauthorizedWithMessage: ${errorEnum.code}, ${errorEnum.message}")
 
-                            // Note: when using enum classes and all cases are covered, the else case is not needed.
-                            //else -> {
-                            //    Text("errorEnum: Unknown")
-                            //}
+//                            // Note: when using enum classes and all cases are covered, the else case is not needed.
+//                            else -> {
+//                                Text("errorEnum: Unknown")
+//                            }
                         }
                         Text("errorEnum.getErrorMessage: ${errorEnum.getErrorMessage()}")
                         Spacer(modifier = Modifier.height(4.dp))

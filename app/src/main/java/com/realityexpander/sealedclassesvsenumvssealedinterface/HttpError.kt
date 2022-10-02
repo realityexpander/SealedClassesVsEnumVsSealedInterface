@@ -79,7 +79,7 @@ sealed interface HttpErrorSealedInterface1 {
 // Pros: Allows for more complex hierarchies than sealed classes.
 // Pros: Using a hierarchy allows for easier to read code (ie: Unauthorized.WithMessage)
 // Cons: primary constructor cannot be used.
-// Cons: Must use "inner classes" to create the types.
+// Cons: Must use "inner classes" to create the sub-types.
 // Cons: `when` expressions are no longer exhaustive and show no warning for unimplemented cases.
 sealed interface HttpErrorSealedInterface2 {
     val code: Int

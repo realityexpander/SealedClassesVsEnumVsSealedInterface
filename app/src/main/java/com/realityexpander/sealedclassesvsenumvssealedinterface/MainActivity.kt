@@ -40,6 +40,8 @@ class MainActivity : ComponentActivity() {
                         //////////////////////////////////////////////////////////
                         // Sealed class with no constructors
                         //////////////////////////////////////////////////////////
+//                        val errorSealed1: HttpErrorSealed1 =
+//                            HttpErrorSealed1.NotFound
                         val errorSealed1: HttpErrorSealed1 = arrayOf(
                             HttpErrorSealed1.NotFound,
                             HttpErrorSealed1.Unauthorized,
@@ -65,6 +67,8 @@ class MainActivity : ComponentActivity() {
                         //////////////////////////////////////////////////////////
                         // Sealed class with constructors
                         //////////////////////////////////////////////////////////
+//                        val errorSealed2: HttpErrorSealed2 =
+//                            HttpErrorSealed2.NotFound
                         val errorSealed2: HttpErrorSealed2 = arrayOf(
                             HttpErrorSealed2.NotFound,
                             HttpErrorSealed2.Unauthorized,
@@ -85,8 +89,8 @@ class MainActivity : ComponentActivity() {
 
                         Spacer(modifier = Modifier.height(4.dp))
 
-                        // Sealed classes values are more difficult than Enums to iterate (requires a reflection library)
                         // show all sealed class members
+                        // Sealed classes values are more difficult than Enums to iterate (requires a reflection library)
                         HttpErrorSealed2::class.nestedClasses.forEachIndexed { index, item ->
                             Text("errorSealed2 nestedClasses $index: ${item.simpleName}")
                         }
@@ -106,6 +110,8 @@ class MainActivity : ComponentActivity() {
                         //////////////////////////////////////////////////////////
                         // Enums
                         //////////////////////////////////////////////////////////
+//                        val errorEnum: HttpErrorEnum =
+//                            HttpErrorEnum.Unauthorized
                         val errorEnum: HttpErrorEnum = arrayOf(
                             HttpErrorEnum.Unauthorized,
                             HttpErrorEnum.UnauthorizedWithMessage, // uses the default message from the enum.
@@ -129,6 +135,7 @@ class MainActivity : ComponentActivity() {
                         Text("errorEnum.getErrorMessage: ${errorEnum.getErrorMessage()}")
                         Spacer(modifier = Modifier.height(4.dp))
 
+                        // show all enum class members
                         // Enums values are easily iterable
                         HttpErrorEnum.values().forEachIndexed { index, value ->
                             Text("errorEnum values: $index = $value")
@@ -145,6 +152,8 @@ class MainActivity : ComponentActivity() {
                         //////////////////////////////////////////////////////////
                         // Sealed interface - simple
                         //////////////////////////////////////////////////////////
+//                        val errorSealedInterface1: HttpErrorSealedInterface1 =
+//                            HttpErrorSealedInterface1.NotFound
                         val errorSealedInterface1 = arrayOf(
                             HttpErrorSealedInterface1.NotFound,
                             HttpErrorSealedInterface1.Unauthorized,

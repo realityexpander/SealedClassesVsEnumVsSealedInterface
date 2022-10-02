@@ -102,7 +102,7 @@ sealed interface HttpErrorSealedInterface2 {
     sealed class Extra(
         override val code: Int,
         override val message: String? = null,
-        open val data: String? = null
+        open val data: String? = null // must be open to override in the inner classes
     ): HttpErrorSealedInterface2 {
 
         object Simple : Extra(200)

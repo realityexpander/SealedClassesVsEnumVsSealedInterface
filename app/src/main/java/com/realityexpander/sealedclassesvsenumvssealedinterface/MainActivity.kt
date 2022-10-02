@@ -252,7 +252,7 @@ class MainActivity : ComponentActivity() {
 // select on item of array at random
 fun <T> Array<T>.random(): T = this[Random.nextInt(size)]
 
-// Get last 2 items of name of class
+// Get last segments of name of class
 fun Any.getShortClassName(numEndSegments: Int = 2): String {
     return this::class.qualifiedName
         ?.split(".")

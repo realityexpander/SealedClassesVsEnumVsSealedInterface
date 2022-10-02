@@ -1,12 +1,17 @@
 package com.realityexpander.sealedclassesvsenumvssealedinterface
 
 import android.os.Bundle
+import android.widget.ScrollView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -28,14 +33,18 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
 
-                    Column {
+                    Column(
+                        modifier = Modifier.verticalScroll(rememberScrollState())
+                    ) {
 
                         //////////////////////////////////////////////////////////
                         // Sealed class with no constructors
+                        //////////////////////////////////////////////////////////
                         val errorSealed1: HttpErrorSealed1 = arrayOf(
                             HttpErrorSealed1.NotFound,
                             HttpErrorSealed1.Unauthorized,
                         ).random()
+                        Text("errorSealed1: type=${errorSealed1.getShortClassName()}")
                         when (errorSealed1) {
                             HttpErrorSealed1.NotFound -> Text("errorSealed1: Not Found")
                             HttpErrorSealed1.Unauthorized -> Text("errorSealed1: Unauthorized")
@@ -44,16 +53,24 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         Text("errorSealed1.getErrorMessage: ${errorSealed1.getErrorMessage()}")
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .height(1.dp)
+                                .background(MaterialTheme.colors.onSurface)
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
 
 
                         //////////////////////////////////////////////////////////
                         // Sealed class with constructors
+                        //////////////////////////////////////////////////////////
                         val errorSealed2: HttpErrorSealed2 = arrayOf(
                             HttpErrorSealed2.NotFound,
                             HttpErrorSealed2.Unauthorized,
                             HttpErrorSealed2.UnauthorizedWithMessage("Unauthorized with message")
                         ).random()
+                        Text("errorSealed2: type=${errorSealed2.getShortClassName()}")
                         when (errorSealed2) {
                             HttpErrorSealed2.NotFound -> Text("errorSealed2: Not Found: ${errorSealed2.code}")
                             HttpErrorSealed2.Unauthorized -> Text("errorSealed2: Unauthorized: ${errorSealed2.code}")
@@ -65,6 +82,7 @@ class MainActivity : ComponentActivity() {
                             //}
                         }
                         Text("errorSealed2.getErrorMessage: ${errorSealed2.getErrorMessage()}")
+
                         Spacer(modifier = Modifier.height(4.dp))
 
                         // Sealed classes values are more difficult than Enums to iterate (requires a reflection library)
@@ -76,11 +94,18 @@ class MainActivity : ComponentActivity() {
                             Text("errorSealed2 sealedSubclasses $index: ${item.simpleName}")
                         }
 
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .height(1.dp)
+                                .background(MaterialTheme.colors.onSurface)
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
 
 
                         //////////////////////////////////////////////////////////
                         // Enums
+                        //////////////////////////////////////////////////////////
                         val errorEnum: HttpErrorEnum = arrayOf(
                             HttpErrorEnum.Unauthorized,
                             HttpErrorEnum.UnauthorizedWithMessage, // uses the default message from the enum
@@ -90,6 +115,7 @@ class MainActivity : ComponentActivity() {
                                     message = "Message Changed at runtime" // override the default message
                                 }
                         ).random()
+                        Text("errorEnum: type=${errorEnum.getShortClassName(1)}")
                         when (errorEnum) {
                             HttpErrorEnum.NotFound -> Text("errorEnum: Not Found: ${errorEnum.code}")
                             HttpErrorEnum.Unauthorized -> Text("errorEnum: Unauthorized: ${errorEnum.code}")
@@ -107,16 +133,24 @@ class MainActivity : ComponentActivity() {
                         HttpErrorEnum.values().forEachIndexed { index, value ->
                             Text("errorEnum values: $index = $value")
                         }
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .height(1.dp)
+                                .background(MaterialTheme.colors.onSurface)
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
 
 
                         //////////////////////////////////////////////////////////
                         // Sealed interface - simple
+                        //////////////////////////////////////////////////////////
                         val errorSealedInterface1 = arrayOf(
                             HttpErrorSealedInterface1.NotFound,
                             HttpErrorSealedInterface1.Unauthorized,
                             HttpErrorSealedInterface1.UnauthorizedWithMessage("Unauthorized with message"),
                         ).random()
+                        Text("errorSealedInterface1: type=${errorSealedInterface1.getShortClassName(2)}")
                         when (errorSealedInterface1) {
                             HttpErrorSealedInterface1.NotFound ->
                                 Text("errorSealedInterface1: Not Found")
@@ -129,11 +163,18 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         Text("errorSealedInterface1.getErrorMessage: ${errorSealedInterface1.getErrorMessage()}")
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .height(1.dp)
+                                .background(MaterialTheme.colors.onSurface)
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
 
 
                         //////////////////////////////////////////////////////////
                         // Sealed interface - complex
+                        //////////////////////////////////////////////////////////
 //                        val errorSealedInterface2: HttpErrorSealedInterface2 =
 //                           HttpErrorSealedInterface2.Default  // NOTE: must use specific type to initialize the variable
 //                        val errorSealedInterface2: HttpErrorSealedInterface2 =
@@ -152,6 +193,7 @@ class MainActivity : ComponentActivity() {
                             HttpErrorSealedInterface2.Extra.WithData("Extra Data"),
                             HttpErrorSealedInterface2.Extra.WithDataAndMessage("message", "Extra Data"),
                         ).random()
+                        Text("errorSealedInterface2: type=${errorSealedInterface2.getShortClassName(3)}")
                         when (errorSealedInterface2) {
                             HttpErrorSealedInterface2.Default ->
                                 Text("errorSealedInterface2: Default, ${errorSealedInterface2.code}, ${errorSealedInterface2.message}")
@@ -182,6 +224,12 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         Text("errorSealedInterface2.getErrorMessage: ${errorSealedInterface2.getErrorMessage()}")
+                        Divider(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .height(1.dp)
+                                .background(MaterialTheme.colors.onSurface)
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
 
 
@@ -195,3 +243,14 @@ class MainActivity : ComponentActivity() {
 
 // select on item of array at random
 fun <T> Array<T>.random(): T = this[Random.nextInt(size)]
+
+// Get last 2 items of name of class
+fun Any.getShortClassName(numEndSegments: Int = 2): String {
+    return this::class.qualifiedName
+        ?.split(".")
+        ?.reversed()
+        ?.take(numEndSegments)
+        ?.reversed()
+        ?.joinToString(".") { it }
+        ?: ""
+}
